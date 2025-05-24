@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://json.schemastore.org/yamllint.json
+# IPAddressPool resource: defines a pool of IP addresses for MetalLB to assign to services.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: k3s-lb-pool                # Name of the IP address pool
+  namespace: metallb-system        # Namespace where MetalLB is installed
+spec:
+  addresses:
+  - 192.168.3.10-192.168.3.200     # Range of IPs available for load balancer services
+  autoAssign: true                 # Automatically assign IPs from this pool
+
+---
+# yaml-language-server: $schema=https://json.schemastore.org/yamllint.json
+# L2Advertisement resource: advertises the IPs in the pool at Layer 2 (ARP/NDP).
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: k3s-lb-pool                # Name of the advertisement resource
+  namespace: metallb-system        # Namespace where MetalLB is installed
+spec:
+  ipAddressPools:
+  - k3s-lb-pool                    # Reference to the IP address pool defined above
