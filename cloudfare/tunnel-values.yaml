@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://json.schemastore.org/yamllint.json
+cloudflare:
+  tunnelName: "kubernets-tunnel"
+  tunnelId: "5d3e9d90-1f75-4817-b2a9-0bb2b5a5844e"
+  secretName: "tunnel-credentials"
+  ingress:
+    - hostname: "*.danieldias.ca"
+      service: "https://ingress-nginx-controller.ingress-nginx.svc.cluster.local:443"
+      originRequest:
+        noTLSVerify: true
+
+resources:
+  limits:
+    cpu: "100m"
+    memory: "128Mi"
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+
+replicaCount: 2
