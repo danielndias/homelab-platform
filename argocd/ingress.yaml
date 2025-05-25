@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: agocd-ingress
+  namespace: argocd
+  labels:
+    name: agocd-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"  # Use cert-manager for TLS
+    nginx.ingress.kubernetes.io/rewrite-target: /        # Rewrite all paths to root
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"     # Redirect HTTP to HTTPS
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true" # Force SSL redirect
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - argocd.dassidias.com
+    secretName: argocd-tls  # Secret where TLS cert will be stored
+  rules:
+  - host: argocd.dassidias.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: argocd-server
+            port: 
+              number: 443
